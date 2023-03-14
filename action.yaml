@@ -36,7 +36,7 @@ runs:
 
     - name: Get Main Version
       id: main-version
-      uses: actions/github-script@v5
+      uses: actions/github-script@v6
       with:
         result-encoding: string
         script: return require('./package.json').version
@@ -50,7 +50,7 @@ runs:
 
     - name: Get Pull Request Version
       id: pr-version
-      uses: actions/github-script@v5
+      uses: actions/github-script@v6
       with:
         result-encoding: string
         script: return require('./package.json').version
@@ -76,7 +76,7 @@ runs:
 
     - name: Get Updated Version
       id: new-version
-      uses: actions/github-script@v5
+      uses: actions/github-script@v6
       with:
         result-encoding: string
         script: return require('./package.json').version
@@ -91,7 +91,7 @@ runs:
 
     - name: Get Final Version
       id: final-version
-      uses: actions/github-script@v5
+      uses: actions/github-script@v6
       with:
         result-encoding: string
         script: return require('./package.json').version
