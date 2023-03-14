@@ -8,8 +8,8 @@ inputs:
   github-user:
     description: "GitHub Actor"
     required: true
-  branch-ref:
-    description: "Ref of Branch"
+  pull-request-ref:
+    description: "Pull Request Branch Ref"
     required: true
 
 outputs:
@@ -44,7 +44,7 @@ runs:
     - name: Checkout Code
       uses: actions/checkout@v2
       with:
-        ref: ${{ inputs.branch-ref }}
+        ref: ${{ inputs.pull-request-ref }}
         token: ${{ inputs.github-token }}
         fetch-depth: 0
 
@@ -62,7 +62,7 @@ runs:
       run: |
           git checkout main
           git status
-          git checkout "{{ inputs.branch-ref }}"
+          git checkout "{{ inputs.pull-request-ref }}"
           git merge main --no-edit
           git push
           git status
@@ -72,7 +72,7 @@ runs:
       with:
         github-token: ${{ inputs.github-token }}
         github-user: ${{ inputs.github-user }}
-        github-ref: ${{ inputs.branch-ref }}
+        github-ref: ${{ inputs.pull-request-ref }}
 
     - name: Get Version
       id: new-version
