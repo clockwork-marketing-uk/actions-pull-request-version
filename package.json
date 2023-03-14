@@ -1,0 +1,7 @@
+{
+    "name": "actions-pull-request-version",
+    "version": "1.0.0",
+    "description": "Checks and updates the version of the Pull Request",
+    "author": "Clockwork Marketing <dev@clock-work.co.uk>",
+    "license": "ISC"
+}
