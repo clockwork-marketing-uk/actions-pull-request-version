@@ -56,7 +56,7 @@ runs:
         script: return require('./package.json').version
 
     - name: Merge Main
-      if: ${{ steps.pr-version.outputs.result < needs.main-version.outputs.result }}
+      if: ${{ steps.pr-version.outputs.result < steps.main-version.outputs.result }}
       id: merge-main
       shell: bash
       run: |
