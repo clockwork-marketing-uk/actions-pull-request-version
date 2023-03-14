@@ -1,0 +1,88 @@
+name: Version
+description: "Checks and updates the version of the Pull Request"
+
+inputs:
+  github-token:
+    description: "GitHub Token"
+    required: true
+  github-user:
+    description: "GitHub Actor"
+    required: true
+  branch-ref:
+    description: "Ref of Branch"
+    required: true
+
+outputs:
+  version:
+    description: "New Version"
+    value: ${{ steps.new-version.outputs.result }}
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+      with:
+        ref: main
+        token: ${{ inputs.github-token }}
+        fetch-depth: 0
+
+    - name: Set github
+      id: github
+      shell: bash
+      run: |
+        git config --global user.email "github-actions@github.com"
+        git config --global user.name "${{ inputs.github-user }}"
+
+    - name: Get Main Version
+      id: main-version
+      uses: actions/github-script@v5
+      with:
+        result-encoding: string
+        script: return require('./package.json').version
+
+    - name: Checkout Code
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ inputs.branch-ref }}
+        token: ${{ inputs.github-token }}
+        fetch-depth: 0
+
+    - name: Get Version
+      id: pr-version
+      uses: actions/github-script@v5
+      with:
+        result-encoding: string
+        script: return require('./package.json').version
+
+    - name: Merge Main
+      if: ${{ steps.pr-version.outputs.result < needs.main-version.outputs.result }}
+      id: merge-main
+      shell: bash
+      run: |
+          git checkout main
+          git status
+          git checkout "{{ inputs.branch-ref }}"
+          git merge main --no-edit
+          git push
+          git status
+
+    - name: Upgrade Version
+      uses: clockwork-marketing-uk/actions-upgrade-version@1.1.0
+      with:
+        github-token: ${{ inputs.github-token }}
+        github-user: ${{ inputs.github-user }}
+        github-ref: ${{ inputs.branch-ref }}
+
+    - name: Get Version
+      id: new-version
+      uses: actions/github-script@v5
+      with:
+        result-encoding: string
+        script: return require('./package.json').version
+
+    - name: Version
+      shell: bash
+      run: echo ${{ steps.new-version.outputs.result }}
+
+
