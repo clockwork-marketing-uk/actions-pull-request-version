@@ -21,7 +21,7 @@ runs:
   using: composite
   steps:
     - name: Checkout Main Branch
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: main
         token: ${{ inputs.github-token }}
@@ -42,7 +42,7 @@ runs:
         script: return require('./package.json').version
 
     - name: Checkout Pull Request
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: ${{ inputs.pull-request-ref }}
         token: ${{ inputs.github-token }}
@@ -68,7 +68,7 @@ runs:
           git status
 
     - name: Checkout Updated Pull Request Branch
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: ${{ inputs.pull-request-ref }}
         token: ${{ inputs.github-token }}
