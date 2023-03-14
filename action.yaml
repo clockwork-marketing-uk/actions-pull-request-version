@@ -20,14 +20,14 @@ outputs:
 runs:
   using: composite
   steps:
-    - name: Checkout Code
+    - name: Checkout Main Branch
       uses: actions/checkout@v2
       with:
         ref: main
         token: ${{ inputs.github-token }}
         fetch-depth: 0
 
-    - name: Set github
+    - name: Set GitHub Config
       id: github
       shell: bash
       run: |
@@ -41,14 +41,14 @@ runs:
         result-encoding: string
         script: return require('./package.json').version
 
-    - name: Checkout Code
+    - name: Checkout Pull Request
       uses: actions/checkout@v2
       with:
         ref: ${{ inputs.pull-request-ref }}
         token: ${{ inputs.github-token }}
         fetch-depth: 0
 
-    - name: Get Version
+    - name: Get Pull Request Version
       id: pr-version
       uses: actions/github-script@v5
       with:
@@ -67,21 +67,36 @@ runs:
           git push
           git status
 
-    - name: Upgrade Version
-      uses: clockwork-marketing-uk/actions-upgrade-version@1.1.0
+    - name: Checkout Updated Pull Request Branch
+      uses: actions/checkout@v2
       with:
-        github-token: ${{ inputs.github-token }}
-        github-user: ${{ inputs.github-user }}
-        github-ref: ${{ inputs.pull-request-ref }}
+        ref: ${{ inputs.pull-request-ref }}
+        token: ${{ inputs.github-token }}
+        fetch-depth: 0
 
-    - name: Get Version
+    - name: Get Updated Version
       id: new-version
       uses: actions/github-script@v5
       with:
         result-encoding: string
         script: return require('./package.json').version
 
-    - name: Version
+    - name: Upgrade Version
+      if: ${{ steps.new-version.outputs.result == steps.main-version.outputs.result }}
+      uses: clockwork-marketing-uk/actions-upgrade-version@1.1.0
+      with:
+        github-token: ${{ inputs.github-token }}
+        github-user: ${{ inputs.github-user }}
+        github-ref: ${{ inputs.pull-request-ref }}
+
+    - name: Get Final Version
+      id: new-version
+      uses: actions/github-script@v5
+      with:
+        result-encoding: string
+        script: return require('./package.json').version
+
+    - name: Show Final Version
       shell: bash
       run: echo ${{ steps.new-version.outputs.result }}
 
