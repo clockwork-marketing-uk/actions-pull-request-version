@@ -86,7 +86,7 @@ runs:
 
     - name: Upgrade Version
       if: ${{ steps.new-version.outputs.result == steps.main-version.outputs.result }}
-      uses: clockwork-marketing-uk/actions-upgrade-version@1.1.1
+      uses: clockwork-marketing-uk/actions-upgrade-version@1.1.2
       with:
         github-token: ${{ inputs.github-token }}
         npm-token: ${{ inputs.npm-token }}
