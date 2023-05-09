@@ -8,6 +8,9 @@ inputs:
   npm-token:
     description: "NPM Token"
     required: true
+  fa-npm-token:
+    description: "FA NPM Token"
+    required: true
   github-user:
     description: "GitHub Actor"
     required: true
@@ -86,10 +89,11 @@ runs:
 
     - name: Upgrade Version
       if: ${{ steps.new-version.outputs.result == steps.main-version.outputs.result }}
-      uses: clockwork-marketing-uk/actions-upgrade-version@1.1.3
+      uses: clockwork-marketing-uk/actions-upgrade-version@1.1.4
       with:
         github-token: ${{ inputs.github-token }}
         npm-token: ${{ inputs.npm-token }}
+        fa_npm_token: ${{ inputs.fa-npm-token }}
         github-user: ${{ inputs.github-user }}
         github-ref: ${{ inputs.pull-request-ref }}
 
