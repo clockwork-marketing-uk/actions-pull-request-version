@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## Logs
 
+### 1.2.0 (2023-05-16)
+
+Add company tokens
+
 ### 1.1.2 (2023-03-13)
 
 Update Checkout action
