@@ -7,10 +7,13 @@ Checks and updates the version of the Pull Request.
 ```yaml
 
 - name: PR Version Check
-    uses: clockwork-marketing-uk/actions-pull-request-version@1.0.0
+    uses: clockwork-marketing-uk/actions-pull-request-version@1.2.1
     with:
-    github-token: ${{ inputs.github-token }}
-    github-user: ${{ inputs.github-user }}
-    pull-request-ref: ${{ inputs.branch-ref }}
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+      github-user: ${{ github.actor }}
+      pull-request-ref: ${{ github.event.pull_request.head.ref }}
+      fa-npm-token: ${{ secrets.fa_npm_token }}
+      npm_token: ${{ secrets.npm_token }}
+      pull-request-base-branch: version-1
 
 ```
