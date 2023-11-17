@@ -17,6 +17,10 @@ inputs:
   pull-request-ref:
     description: "Pull Request Branch Ref"
     required: true
+  pull-request-base-branch:
+    description: "Pull Request Base Branch"
+    required: true
+    default: "main"
 
 outputs:
   version:
@@ -26,10 +30,10 @@ outputs:
 runs:
   using: composite
   steps:
-    - name: Checkout Main Branch
+    - name: Checkout ${{ inputs.pull-request-base-branch }} Branch
       uses: actions/checkout@v3
       with:
-        ref: main
+        ref: ${{ inputs.pull-request-base-branch }}
         token: ${{ inputs.github-token }}
         fetch-depth: 0
 
@@ -40,7 +44,7 @@ runs:
         git config --global user.email "github-actions@github.com"
         git config --global user.name "${{ inputs.github-user }}"
 
-    - name: Get Main Version
+    - name: Get ${{ inputs.pull-request-base-branch }} Version
       id: main-version
       uses: actions/github-script@v6
       with:
@@ -61,15 +65,15 @@ runs:
         result-encoding: string
         script: return require('./package.json').version
 
-    - name: Merge Main
+    - name: Merge ${{ inputs.pull-request-base-branch }}
       if: ${{ steps.pr-version.outputs.result < steps.main-version.outputs.result }}
       id: merge-main
       shell: bash
       run: |
-          git checkout main
+          git checkout ${{ inputs.pull-request-base-branch }}
           git status
           git checkout "{{ inputs.pull-request-ref }}"
-          git merge main --no-edit
+          git merge ${{ inputs.pull-request-base-branch }} --no-edit
           git push
           git status
 
