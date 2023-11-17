@@ -12,5 +12,6 @@ Checks and updates the version of the Pull Request.
     github-token: ${{ inputs.github-token }}
     github-user: ${{ inputs.github-user }}
     pull-request-ref: ${{ inputs.branch-ref }}
+    pull-request-base-branch: version-1
 
 ```
