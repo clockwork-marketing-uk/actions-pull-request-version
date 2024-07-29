@@ -31,7 +31,7 @@ runs:
   using: composite
   steps:
     - name: Checkout ${{ inputs.pull-request-base-branch }} Branch
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         ref: ${{ inputs.pull-request-base-branch }}
         token: ${{ inputs.github-token }}
@@ -46,7 +46,7 @@ runs:
 
     - name: Get ${{ inputs.pull-request-base-branch }} Version
       id: main-version
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         result-encoding: string
         script: return require('./package.json').version
@@ -60,7 +60,7 @@ runs:
 
     - name: Get Pull Request Version
       id: pr-version
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         result-encoding: string
         script: return require('./package.json').version
@@ -78,7 +78,7 @@ runs:
           git status
 
     - name: Checkout Updated Pull Request Branch
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         ref: ${{ inputs.pull-request-ref }}
         token: ${{ inputs.github-token }}
@@ -86,14 +86,14 @@ runs:
 
     - name: Get Updated Version
       id: new-version
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         result-encoding: string
         script: return require('./package.json').version
 
     - name: Upgrade Version
       if: ${{ steps.new-version.outputs.result == steps.main-version.outputs.result }}
-      uses: clockwork-marketing-uk/actions-upgrade-version@1.2.0
+      uses: clockwork-marketing-uk/actions-upgrade-version@1.2.1
       with:
         github-token: ${{ inputs.github-token }}
         github-user: ${{ inputs.github-user }}
@@ -104,7 +104,7 @@ runs:
 
     - name: Get Final Version
       id: final-version
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         result-encoding: string
         script: return require('./package.json').version
